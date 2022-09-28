@@ -1,0 +1,41 @@
+.table {
+  border: 3px solid black;
+
+  td, th{
+    padding: 5px;
+    min-width: 100px;
+    &:nth-child(2){
+      min-width: 150px;
+
+    }
+  }
+  th{
+    background-color: #74a93e;
+    &:not(:nth-child(1)):hover {
+      cursor: pointer;
+      background-color: #c1c4c0;
+    }
+  }
+  tbody{
+    tr:nth-child(2n){
+      background-color: #dde1e1;
+    }
+  }
+}
+
+
+.thead {
+  border: 2px solid black;
+
+  th {
+  }
+
+  & tr {
+    border: 2px solid black;
+
+  }
+}
+
+.headRow {
+  border: 2px solid black;
+}

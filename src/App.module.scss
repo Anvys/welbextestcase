@@ -1,0 +1,13 @@
+.app{
+  display: flex;
+  //flex-direction: column;
+  justify-content: center;
+  //align-content: start;
+  //width: fit-content;
+}
+.dataView{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 80%;
+}

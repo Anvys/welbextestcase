@@ -1,0 +1,25 @@
+import axios, { AxiosResponse } from 'axios'
+import {axRes, TFilterData, TRadar, TRadarKeys, TRequestBody} from "../Utils/Types";
+
+const baseURL = 'http://127.0.0.1'
+const port = 3333;
+const instance = axios.create({
+    baseURL: `${baseURL}:${port}/api`,
+});
+
+
+const uri='radar'
+export const radarAPI = {
+    create: (data: TRadar) => instance.post<axRes, AxiosResponse<axRes>, TRequestBody>(
+        `${uri}/one`, {type: uri, data: data}).then(data => data.data),
+
+
+    getOne: (id: string) => instance.get<axRes>(`${uri}/${id}`).then(data => data.data),
+    getAll: (data:TFilterData) =>instance.get<axRes>(`${uri}`,{params:{...data}}).then(data => data.data),
+
+
+    updateOne: (id: string, data: TRadar) => instance.put<axRes, AxiosResponse<axRes>, TRequestBody>(
+        `${uri}/${id}`, {type: uri, data: data}).then(data => data.data),
+    deleteOne: (id: string) => instance.delete<axRes, AxiosResponse<axRes>, TRequestBody>(
+        `${uri}/${id}`).then(data => data.data),
+}
