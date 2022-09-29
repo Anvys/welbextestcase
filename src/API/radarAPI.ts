@@ -24,3 +24,4 @@ export const radarAPI = {
     deleteOne: (id: string) => instance.delete<axRes, AxiosResponse<axRes>, TRequestBody>(
         `${uri}/${id}`).then(data => data.data),
 }
+
