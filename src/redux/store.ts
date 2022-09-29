@@ -2,7 +2,6 @@ import {configureStore} from "@reduxjs/toolkit";
 import {RadarSlice} from "./reducers/radarSlice";
 import {useDispatch} from "react-redux";
 
-
 export const store = configureStore({
     reducer: {
         radar: RadarSlice.reducer,

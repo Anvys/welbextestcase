@@ -8,22 +8,19 @@ import {DataView} from "./components/DataView/DataView";
 import s from './App.module.scss'
 
 type TProps = {}
-export const App:React.FC<TProps> = (props) => {
+export const App: React.FC<TProps> = (props) => {
     const dispatch = useAppDispatch()
     const isInit = useSelector(RadarSelectors.isInit)
-    if(!isInit) dispatch(RadarThunks.getAll({
-        // page:1,
-        // count:20,
+    if (!isInit) dispatch(RadarThunks.getAll({
         expr: ExprCodes.include,
-        filterType:'',
-        searchStr:''
+        filterType: '',
+        searchStr: ''
     }))
     return (
         <div className={s.app}>
             <div className={s.dataView}>
                 <DataView/>
             </div>
-
         </div>
     )
 }

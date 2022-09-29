@@ -8,17 +8,9 @@ import {Paginator} from "../Paginator/Paginator";
 import {SearchBar} from "../SearchBar/SearchBar";
 import {AddForm} from "../AddForm/AddForm";
 
-type TProps = {
-    // data: Array<TRadar>
-}
-
-
+type TProps = {}
 export const DataView: React.FC<TProps> = (props) => {
-    // const {data} = props
     const data = useSelector(RadarSelectors.getData)
-    // console.log(data)
-    const page = useSelector(RadarSelectors.getPage)
-    const pageCount = useSelector(RadarSelectors.getCount)
     const errors = useSelector(RadarSelectors.getError)
     const [filter, setFilter] = useState<TRadarKeys>('name')
     const [asc, setAsc] = useState(false)
@@ -33,7 +25,6 @@ export const DataView: React.FC<TProps> = (props) => {
         else setAsc(a => !a)
         setFilter(key)
     }
-    // console.log(pageCount, data.length)
     return (
         <>
             {errors.length > 0 && <div className={s.errorMsg}>{errors.join('\n')}</div>}
@@ -41,37 +32,35 @@ export const DataView: React.FC<TProps> = (props) => {
                 <SearchBar/>
                 <AddForm/>
             </div>
-            <><Paginator/></>
-            <>
-                <table className={s.table}>
-                    <thead className={s.thead}>
-                        <tr className={s.headRow}>
-                            <th>Дата</th>
-                            <th style={filter === 'name' ? currentSortedCol : {}}
-                                onClick={onSortClickHandler('name')}>Название
-                            </th>
-                            <th style={filter === 'count' ? currentSortedCol : {}}
-                                onClick={onSortClickHandler('count')}>Количество
-                            </th>
-                            <th style={filter === 'range' ? currentSortedCol : {}}
-                                onClick={onSortClickHandler('range')}>Расстояние
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sortedData.length > 0 ? sortedData.map((row, i) =>
-                                <tr key={row.id}>
-                                    <td>{new Date(row.date).toLocaleDateString()}</td>
-                                    <td>{row.name}</td>
-                                    <td>{row.count}</td>
-                                    <td>{row.range.toFixed(5)}</td>
-                                </tr>)
-                            : <tr>
-                                <td colSpan={4}>Nothing found</td>
-                            </tr>}
-                    </tbody>
-                </table>
-            </>
+            <Paginator/>
+            <table className={s.table}>
+                <thead className={s.thead}>
+                    <tr className={s.headRow}>
+                        <th>Дата</th>
+                        <th style={filter === 'name' ? currentSortedCol : {}}
+                            onClick={onSortClickHandler('name')}>Название
+                        </th>
+                        <th style={filter === 'count' ? currentSortedCol : {}}
+                            onClick={onSortClickHandler('count')}>Количество
+                        </th>
+                        <th style={filter === 'range' ? currentSortedCol : {}}
+                            onClick={onSortClickHandler('range')}>Расстояние
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {sortedData.length > 0 ? sortedData.map((row, i) =>
+                            <tr key={row.id}>
+                                <td>{new Date(row.date).toLocaleDateString()}</td>
+                                <td>{row.name}</td>
+                                <td>{row.count}</td>
+                                <td>{row.range.toFixed(5)}</td>
+                            </tr>)
+                        : <tr>
+                            <td colSpan={4}>Nothing found</td>
+                        </tr>}
+                </tbody>
+            </table>
         </>
     )
 }

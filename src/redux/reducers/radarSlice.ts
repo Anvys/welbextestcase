@@ -70,11 +70,6 @@ export const RadarSlice = createSlice({
             state.error = [...action.payload]
         },
     },
-    extraReducers: (builder) => {
-        // Add reducers for additional action types here, and handle loading state as needed
-        // builder.addCase(RadarThunks.getAll.fulfilled, (state, action) => {
-        // })
-    }
 })
 
 export type TRadarThunks = typeof RadarThunks;

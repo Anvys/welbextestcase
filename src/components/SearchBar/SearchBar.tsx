@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import styles from './SearchBar.module.scss'
 import {useSelector} from "react-redux";
 import {RadarSelectors} from "../../redux/Selectors";
 import {TRadarKeys} from "../../Utils/Types";
@@ -27,7 +26,7 @@ export const SearchBar: React.FC<TProps> = (props) => {
         dispatch(RadarThunks.setFilter(newFilter))
         console.log('Submitted', newFilter)
     }
-    const onClearHandler = ()=>{
+    const onClearHandler = () => {
         dispatch(RadarSlice.actions.resetFilter())
         setKey('')
         setExpr(() => filter.expr)
@@ -52,13 +51,12 @@ export const SearchBar: React.FC<TProps> = (props) => {
                 <label>Search in </label>
                 <select value={key} onChange={e => setKey(e.target.value as TRadarKeys | '')}>
                     <option value={''}
-                            >{`Select key`}</option>
+                    >{`Select key`}</option>
                     <option value={'name'}>{`Name`}</option>
                     <option value={'count'}>{`Count`}</option>
                     <option value={'range'}>{`Range`}</option>
                 </select>
             </div>
-
             <div>
                 <label>Expression </label>
                 <select value={expr} onChange={e => setExpr(+e.target.value as ExprCodes)} disabled={!key}>
@@ -70,16 +68,15 @@ export const SearchBar: React.FC<TProps> = (props) => {
             </div>
             <div>
                 <label>Search string </label>
-                <input placeholder={'Search...'} type={key==='name'?"text":'number'} value={searchString}
+                <input placeholder={'Search...'} type={key === 'name' ? "text" : 'number'} value={searchString}
                        onChange={e => setSearchString(e.target.value)} disabled={!key}/>
             </div>
             <div>
                 {isSearching ? <div>Searching ...</div> : <>
-                <button type={'submit'}>Search!</button>
-                <button type={'button'} onClick={onClearHandler}>clear!</button></>}
+                    <button type={'submit'}>Search!</button>
+                    <button type={'button'} onClick={onClearHandler}>clear!</button>
+                </>}
             </div>
-
-
         </form>
     )
 }
