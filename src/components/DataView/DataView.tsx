@@ -6,6 +6,7 @@ import {useSelector} from "react-redux";
 import {RadarSelectors} from "../../redux/Selectors";
 import {Paginator} from "../Paginator/Paginator";
 import {SearchBar} from "../SearchBar/SearchBar";
+import {AddForm} from "../AddForm/AddForm";
 
 type TProps = {
     // data: Array<TRadar>
@@ -36,7 +37,10 @@ export const DataView: React.FC<TProps> = (props) => {
     return (
         <>
             {errors.length > 0 && <div className={s.errorMsg}>{errors.join('\n')}</div>}
-            <><SearchBar/></>
+            <div className={s.searchDiv}>
+                <SearchBar/>
+                <AddForm/>
+            </div>
             <><Paginator/></>
             <>
                 <table className={s.table}>

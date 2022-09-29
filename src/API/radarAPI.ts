@@ -11,7 +11,7 @@ const instance = axios.create({
 const uri='radar'
 export const radarAPI = {
     create: (data: TRadar) => instance.post<axRes, AxiosResponse<axRes>, TRequestBody>(
-        `${uri}/one`, {type: uri, data: data}).then(data => data.data),
+        `${uri}`, {type: uri, data: data}).then(data => data.data),
 
 
     getOne: (id: string) => instance.get<axRes>(`${uri}/${id}`).then(data => data.data),
