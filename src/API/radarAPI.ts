@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
 import {axRes, TFilterData, TRadar, TRadarKeys, TRequestBody} from "../Utils/Types";
 
-const baseURL = 'http://node_server'
+// const baseURL = process.env.NODE_ENV==='development'?`${process.env.BE_HOST_DEV}`:`${process.env.BE_HOST_PROD}`
+const baseURL = 'http://62.84.122.87'
 const port = 3000;
 const instance = axios.create({
     baseURL: `${baseURL}:${port}/api`,
