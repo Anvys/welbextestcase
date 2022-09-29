@@ -1,6 +1,6 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TFilterData, TRadar, TRadarKeys} from "../../Utils/Types";
+import {TRadar, TRadarKeys} from "../../Utils/Types";
 import {radarAPI} from "../../API/radarAPI";
 import {checkError} from "../../Utils/UtilFunc";
 import {ExprCodes} from "../../Utils/StatusCodes";
@@ -20,6 +20,7 @@ export type TInitialState = {
     page: number
     count: number // rows per page
     filter: TFilter
+    error:Array<string>
 }
 const initialState: TInitialState = {
     data: [],
@@ -31,7 +32,8 @@ const initialState: TInitialState = {
         expr: ExprCodes.include,
         filterType: undefined,
         searchStr: ''
-    }
+    },
+    error:[],
 }
 
 export const RadarSlice = createSlice({
@@ -54,6 +56,9 @@ export const RadarSlice = createSlice({
         setFilter: (state, action: PayloadAction<TFilter>) => {
             state.filter = {...action.payload}
         },
+        setError: (state, action: PayloadAction<Array<string>>) => {
+            state.error = [...action.payload]
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -68,52 +73,25 @@ export const RadarThunks = {
             const state = thunkAPI.getState() as TAppState
             const res = await radarAPI.getAll({...filter, page: state.radar.page, count: state.radar.count})
             if (checkError(res)) {
+                if(state.radar.error.length>0)thunkAPI.dispatch(RadarSlice.actions.setError([]))
                 thunkAPI.dispatch(RadarSlice.actions.init(res.data.rows.map(v =>
                     ({...v, date: Number(v.date), range: Number(v.range)}))))
                 thunkAPI.dispatch(RadarSlice.actions.setTotal(res.data.total))
+            }else{
+                thunkAPI.dispatch(RadarSlice.actions.setError(res.msg))
             }
         }
     ),
     setPage: createAsyncThunk(`${reducerPath}/setPage`, async (data: { page: number, count: number, filter: TFilter }, thunkAPI) => {
             thunkAPI.dispatch(RadarSlice.actions.setPage(data.page))
             thunkAPI.dispatch(RadarSlice.actions.setCount(data.count))
-            thunkAPI.dispatch(RadarThunks.getAll({
-                // page: data.page,
-                // count: data.count,
-                ...data.filter
-            }))
+            thunkAPI.dispatch(RadarThunks.getAll({...data.filter}))
         }
     ),
     setFilter: createAsyncThunk(`${reducerPath}/setFilter`, async (filter: TFilter, thunkAPI) => {
             thunkAPI.dispatch(RadarSlice.actions.setPage(1))
             thunkAPI.dispatch(RadarSlice.actions.setFilter(filter))
-            thunkAPI.dispatch(RadarThunks.getAll({
-                ...filter
-            }))
+            thunkAPI.dispatch(RadarThunks.getAll({...filter}))
         }
     ),
-    // getOne: createAsyncThunk(`${reducerPath}/getOne`, async (id: string, thunkAPI) => {
-    //         thunkAPI.dispatch(CurSlice.actions.initSelectArr())
-    //         const res = await radarAPI.getOne(id)
-    //         if (checkError(res)) return res.data
-    //     }
-    // ),
-    // addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TQuest>, thunkAPI) => {
-    //         const res = await radarAPI.addOne(data)
-    //         if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.addOne(res.data))
-    //     }
-    // ),
-    // updateOne: createAsyncThunk(`${reducerPath}/updateOne`, async (resInfo: { id: string, data: TQuest }, thunkAPI) => {
-    //         const res = await radarAPI.updateOne(resInfo.id, resInfo.data)
-    //         if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.updateOne({
-    //             id: resInfo.id,
-    //             data: resInfo.data
-    //         }))
-    //     }
-    // ),
-    // deleteOne: createAsyncThunk(`${reducerPath}/deleteOne`, async (id: string, thunkAPI) => {
-    //         const res = await radarAPI.deleteOne(id)
-    //         if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.deleteOne({id: id}))
-    //     }
-    // ),
 }

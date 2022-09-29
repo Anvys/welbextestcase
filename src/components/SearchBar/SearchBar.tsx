@@ -45,9 +45,8 @@ export const SearchBar: React.FC<TProps> = (props) => {
             <div>
                 <label>Search in </label>
                 <select value={key} onChange={e => setKey(e.target.value as TRadarKeys | undefined)}>
-                    <option value={undefined} disabled
-                            selected={filter.filterType === undefined}>{`Select key`}</option>
-                    <option value={'data'}>{`Data`}</option>
+                    <option value={undefined}
+                            >{`Select key`}</option>
                     <option value={'name'}>{`Name`}</option>
                     <option value={'count'}>{`Count`}</option>
                     <option value={'range'}>{`Range`}</option>
@@ -65,7 +64,7 @@ export const SearchBar: React.FC<TProps> = (props) => {
             </div>
             <div>
                 <label>Search string </label>
-                <input placeholder={'Search...'} type={"text"} value={searchString}
+                <input placeholder={'Search...'} type={key==='name'?"text":'number'} value={searchString}
                        onChange={e => setSearchString(e.target.value)} disabled={!key}/>
             </div>
             {isSearching ? <div>Searching ...</div> : <button type={'submit'}>Search!</button>}

@@ -7,4 +7,5 @@ export const RadarSelectors = {
     getCount: (state: TAppState) => state.radar.count,
     getTotal: (state: TAppState) => state.radar.total,
     getFilter: (state: TAppState) => state.radar.filter,
+    getError: (state: TAppState) => state.radar.error,
 }

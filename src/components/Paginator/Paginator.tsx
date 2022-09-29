@@ -37,7 +37,7 @@ const filter = useSelector(RadarSelectors.getFilter)
         <div className={s.paginator}>
             <div className={s.main}>
                 {new Array(pages).fill(1).map((v, i) =>
-                    <div onClick={onPageClick(i+1)} className={page === i + 1 ? s.selected : ''}>{i + 1}</div>)}
+                    <div key={i} onClick={onPageClick(i+1)} className={page === i + 1 ? s.selected : ''}>{i + 1}</div>)}
             </div>
             <div className={s.pageCount}>
                 <button className={pageCount === 10 ? s.selected:''} onClick={onPageCountClick(10)} type={'button'}>10</button>
