@@ -5,14 +5,14 @@ import {RadarSelectors} from "../../redux/Selectors";
 import {TRadarKeys} from "../../Utils/Types";
 import {ExprCodes} from "../../Utils/StatusCodes";
 import {useAppDispatch} from "../../redux/store";
-import {RadarThunks} from "../../redux/reducers/radarSlice";
+import {RadarSlice, RadarThunks} from "../../redux/reducers/radarSlice";
 import useDebounce from "../../Utils/useDebounce";
 
 type TProps = {}
 export const SearchBar: React.FC<TProps> = (props) => {
     const dispatch = useAppDispatch()
     const filter = useSelector(RadarSelectors.getFilter)
-    const [key, setKey] = useState<TRadarKeys | undefined>(() => filter.filterType)
+    const [key, setKey] = useState<TRadarKeys | ''>(() => filter.filterType)
     const [expr, setExpr] = useState<ExprCodes>(() => filter.expr)
     const [searchString, setSearchString] = useState<string>(() => filter.searchStr)
     const [isSearching, setIsSearching] = useState(false);
@@ -26,6 +26,12 @@ export const SearchBar: React.FC<TProps> = (props) => {
         }
         dispatch(RadarThunks.setFilter(newFilter))
         console.log('Submitted', newFilter)
+    }
+    const onClearHandler = ()=>{
+        dispatch(RadarSlice.actions.resetFilter())
+        setKey('')
+        setExpr(() => filter.expr)
+        setSearchString('')
     }
     useEffect(
         () => {
@@ -44,8 +50,8 @@ export const SearchBar: React.FC<TProps> = (props) => {
         <form onSubmit={onFormSubmit}>
             <div>
                 <label>Search in </label>
-                <select value={key} onChange={e => setKey(e.target.value as TRadarKeys | undefined)}>
-                    <option value={undefined}
+                <select value={key} onChange={e => setKey(e.target.value as TRadarKeys | '')}>
+                    <option value={''}
                             >{`Select key`}</option>
                     <option value={'name'}>{`Name`}</option>
                     <option value={'count'}>{`Count`}</option>
@@ -67,7 +73,12 @@ export const SearchBar: React.FC<TProps> = (props) => {
                 <input placeholder={'Search...'} type={key==='name'?"text":'number'} value={searchString}
                        onChange={e => setSearchString(e.target.value)} disabled={!key}/>
             </div>
-            {isSearching ? <div>Searching ...</div> : <button type={'submit'}>Search!</button>}
+            <div>
+                {isSearching ? <div>Searching ...</div> : <>
+                <button type={'submit'}>Search!</button>
+                <button type={'button'} onClick={onClearHandler}>clear!</button></>}
+            </div>
+
 
         </form>
     )

@@ -10,7 +10,7 @@ const reducerPath = 'wtc/radar'
 
 export type TFilter = {
     expr: ExprCodes,
-    filterType: TRadarKeys | undefined,
+    filterType: TRadarKeys | '',
     searchStr: string
 }
 export type TInitialState = {
@@ -30,7 +30,7 @@ const initialState: TInitialState = {
     count: 10,
     filter: {
         expr: ExprCodes.include,
-        filterType: undefined,
+        filterType: '',
         searchStr: ''
     },
     error:[],
@@ -62,7 +62,7 @@ export const RadarSlice = createSlice({
         resetFilter: (state, action: PayloadAction) => {
             state.filter = {
                 expr: ExprCodes.include,
-                filterType: undefined,
+                filterType: '',
                 searchStr: ''
             }
         },
@@ -81,7 +81,8 @@ export type TRadarThunks = typeof RadarThunks;
 export const RadarThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (filter: TFilter, thunkAPI) => {
             const state = thunkAPI.getState() as TAppState
-            const res = await radarAPI.getAll({...filter, page: state.radar.page, count: state.radar.count})
+            const res = await radarAPI.getAll({...filter, page: state.radar.page, count: state.radar.count,
+                filterType:state.radar.filter.filterType===''?undefined:state.radar.filter.filterType})
             if (checkError(res)) {
                 if(state.radar.error.length>0)thunkAPI.dispatch(RadarSlice.actions.setError([]))
                 thunkAPI.dispatch(RadarSlice.actions.init(res.data.rows.map(v =>

@@ -15,7 +15,7 @@ export const App:React.FC<TProps> = (props) => {
         // page:1,
         // count:20,
         expr: ExprCodes.include,
-        filterType:undefined,
+        filterType:'',
         searchStr:''
     }))
     return (
